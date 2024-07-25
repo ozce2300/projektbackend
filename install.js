@@ -21,7 +21,19 @@ const connection = mysql.createConnection({
     }
   });
 
+// SQL-FRÅGA
 
+connection.query(`CREATE TABLE foodmeny (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(235),
+    description VARCHAR(300),
+    price INT,
+    created DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`, (err, results) =>{
+        if(err) throw err;
+
+        console.log("Tabel foodmeny created" + results)
+    });
 
 
 
