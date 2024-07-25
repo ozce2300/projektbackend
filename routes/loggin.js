@@ -4,8 +4,14 @@ const connection = require("../server"); // Importera anslutningen
 
 
 // route
-router.post('/', (req, res) => {
-    res.json({message: ("Logged in")})
+router.post('/', async (req, res) => {
+    try {
+        res.json({ message: "Logged in" })
+    }
+
+    catch {
+        res.status(500).json({ error: " Server error" })
+    }
 });
 
 module.exports = router;

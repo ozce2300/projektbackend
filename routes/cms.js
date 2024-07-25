@@ -5,20 +5,47 @@ const connection = require("../server"); // Importera anslutningen
 
 // routes
 
-router.get('/', (req, res) => {
-    res.json("CMS endpoint");
+router.get('/', async (req, res) => {
+    try {
+        res.json({ message: ("Get cms") })
+    }
+
+    catch {
+        res.status(500).json({ error: " Server error" })
+    }
 });
 
 router.post('/', (req, res) => {
-    res.json("CMS endpoint");
+    connection.query(`INSERT INTO foodmeny(name, description, price) VALUES("Margarheta", "ost, skinka", 555)`, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: "Server error" });
+            return;
+        }
+
+        res.json({ message: "New menu ", results });
+    });
 });
 
-router.put('/', (req, res) => {
-    res.json("CMS endpoint");
+
+
+router.put('/', async (req, res) => {
+    try {
+        res.json({ message: ("Put cms") })
+    }
+
+    catch {
+        res.status(500).json({ error: " Server error" })
+    }
 });
 
-router.put('/', (req, res) => {
-    res.json("CMS endpoint");
+router.delete('/', async (req, res) => {
+    try {
+        res.json({ message: "Deleted cms" })
+    }
+
+    catch {
+        res.status(500).json({ error: " Server error" })
+    }
 });
 
 module.exports = router;

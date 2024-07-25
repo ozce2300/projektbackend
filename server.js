@@ -22,22 +22,22 @@ connection.connect(err => {
     console.log("Connected to database");
 });
 
-// Exportera anslutningen
-module.exports = connection;
-
 // Middleware
 app.use(express.json());  // För att hantera JSON-data
 app.use(cors());  // För att hantera CORS
 
-// Importera routes från 'routes' mappen
+// Exportera connection
+module.exports = connection;
+
+// Importera rutter från 'routes' mappen
 const getMenu = require('./routes/getMenu');
 const loggin = require('./routes/loggin');
 const cms = require('./routes/cms');
 
-// Använd routes
+// Använd rutter
 app.use("/", getMenu);
 app.use("/admin", loggin);
-app.use("/admin/cms", cms);
+app.use("/cms", cms);
 
 // Starta server
 app.listen(port, () => {

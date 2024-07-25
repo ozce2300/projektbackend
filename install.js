@@ -40,6 +40,8 @@ connection.query(`CREATE TABLE foodmeny (
         console.log("Tabel foodmeny created" + results)
     });
 
+    
+
 
 
 
