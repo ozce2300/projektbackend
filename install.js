@@ -14,6 +14,7 @@ const connection = mysql.createConnection({
   connection.connect(err =>{
     if(err) {
         console.log("Could not connect to database")
+        return;
     }
 
     else {
@@ -23,6 +24,10 @@ const connection = mysql.createConnection({
 
 // SQL-FRÅGA
 
+connection.query(`DROP TABLE IF EXISTS foodmeny`, (err, results) => {
+    if (err) throw err;
+    console.log("Tabel removed" + results)
+} )
 connection.query(`CREATE TABLE foodmeny (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(235),
