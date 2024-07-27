@@ -27,7 +27,7 @@ const connection = mysql.createConnection({
 connection.query(`DROP TABLE IF EXISTS foodmeny`, (err, results) => {
     if (err) throw err;
     console.log("Tabel removed" + results)
-} )
+})
 connection.query(`CREATE TABLE foodmeny (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(235),
@@ -40,7 +40,7 @@ connection.query(`CREATE TABLE foodmeny (
         console.log("Tabel foodmeny created" + results)
     });
 
-    
+
 
 
 
