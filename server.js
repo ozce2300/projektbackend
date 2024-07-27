@@ -5,6 +5,7 @@ require("dotenv").config();
 const port = process.env.DB_PORT | 8000;
 const app = express();
 
+
 // Ansluta till MySQL-databas
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -33,11 +34,14 @@ module.exports = connection;
 const getMenu = require('./routes/getMenu');
 const loggin = require('./routes/loggin');
 const cms = require('./routes/cms');
+const postTable = require('./routes/postTable')
 
 // Använd rutter
 app.use("/", getMenu);
 app.use("/admin", loggin);
 app.use("/cms", cms);
+app.use("/postTable", postTable);
+
 
 // Starta server
 app.listen(port, () => {
