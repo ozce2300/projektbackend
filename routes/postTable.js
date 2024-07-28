@@ -15,8 +15,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
-
 router.post('/', (req, res) => {
     const { customer_name, phone, email,reservation_date,reservation_time, number_of_guests } = req.body
 
@@ -35,6 +33,7 @@ router.post('/', (req, res) => {
         return;
     }
 
+    // SQL FRåga
     connection.query(`INSERT INTO bord(customer_name, email, phone, reservation_date, reservation_time, number_of_guests) 
         VALUES(?,?,?,?,?,?)`, [customer_name, email, phone, reservation_date, reservation_time,number_of_guests], (err, results) => {
         if (err) {
@@ -42,6 +41,7 @@ router.post('/', (req, res) => {
             res.status(500).json({ error: "Server error" });
             return;
         }
+        //Objekt
 
         let booking = {
             customer_name: customer_name,
@@ -54,12 +54,22 @@ router.post('/', (req, res) => {
 
         res.json({ message: "New menu ", booking });
 
+        //Skicka mejl ifall allt är okej
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: email,
+            from: `"Dollar Restaurang" <${process.env.EMAIL_USER}>`,
+            to: email, 
             subject: 'Bokningsbekräftelse',
-            text: `Hej ${customer_name},\n\nTack för din bokning!\n\nDetaljer:\nDatum: ${reservation_date}\nTid: ${reservation_time}
-            \nAntal gäster: ${number_of_guests}\n\nVarmt Välkomna,\n Restaurang Dollar`
+            text: `Hej ${customer_name},\n\nTack för din bokning!\n\nDetaljer:\nDatum: ${reservation_date}\nTid: ${reservation_time}\nAntal gäster: ${number_of_guests}\n\n<Varmt Välkomna>,\nDollar Restaurang`,
+            html: `<p>Hej ${customer_name},</p>
+                   <p>Tack för din bokning!</p>
+                   <p>Detaljer:</p>
+                   <ul>
+                       <li>Datum: ${reservation_date}</li>
+                       <li>Tid: ${reservation_time}</li>
+                       <li>Antal gäster: ${number_of_guests}</li>
+                   </ul>
+                   <p>Varmt Välkomna,<br>Dollar Restaurang</p>`
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -71,6 +81,9 @@ router.post('/', (req, res) => {
     });
 });
 
+});
+
+//SQL-Fråga
 router.get('/', (req, res) => {
     connection.query('SELECT * FROM bord', (err, results) => {
         if (err) {
@@ -83,7 +96,6 @@ router.get('/', (req, res) => {
             return;
         }
         res.json({ message: "Get booking", results })
-    })
 });
 });
 

@@ -6,9 +6,21 @@ const connection = require("../server"); // Importera anslutningen
 // route
 router.post('/', async (req, res) => {
     try {
-        res.json({ message: "Logged in" })
-    }
+       const {username, password} = req.body
+       errors = [];
 
+       //Validera inmatning
+       if(!username) {errors.push("Write in your username")};
+       if (!password) { errors.push("Write in your password")};
+
+       if (errors.length > 0) {
+        res.status(400).json({errors})
+        return;
+       }
+
+   
+       
+    }
     catch {
         res.status(500).json({ error: " Server error" })
     }

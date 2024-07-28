@@ -59,6 +59,25 @@ connection.query(`CREATE TABLE bord (
     console.log("Tabel bord created" + results)
 });
 
+connection.query(`DROP TABLE IF EXISTS members`, (err, results) => {
+    if (err) throw err;
+    console.log("Tabel removed" + results)
+})
+
+connection.query(`CREATE TABLE members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`, (err, results) => {
+    if (err) throw err;
+
+    console.log("Tabel members created" + results)
+});
+
+
+
 
 
 
