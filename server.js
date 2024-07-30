@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.DB_PORT | 8000;
 const app = express();
+const jwt = require("jsonwebtoken")
 
 
 // Ansluta till MySQL-databas
@@ -32,16 +33,36 @@ module.exports = connection;
 
 // Importera rutter från 'routes' mappen
 const getMenu = require('./routes/getMenu');
-const loggin = require('./routes/loggin');
+const auth = require('./routes/auth');
 const cms = require('./routes/cms');
 const postTable = require('./routes/postTable')
 
-// Använd rutter
-app.use("/", getMenu);
-app.use("/admin", loggin);
-app.use("/cms", cms);
-app.use("/postTable", postTable);
+// Använd routes
+app.use("/admin", auth);
+app.use("/", authenticateToken, getMenu);
+app.use("/cms", authenticateToken, cms);
+app.use("/postTable", authenticateToken, postTable);
 
+//Validera token
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    console.log('Authorization header:', authHeader);  // Lägg till denna rad
+    const token = authHeader && authHeader.split(" ")[1]; // Token
+
+    if (token == null) {
+        return res.status(401).json({message: "Not authorize for this page, token missing"});
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
+        if (err) {
+            console.error('JWT verification error:', err);  // Lägg till denna rad
+            return res.status(403).json({message: "Invalid JWT"});
+        }
+
+        req.username = username;
+        next();
+    });
+}
 
 // Starta server
 app.listen(port, () => {
