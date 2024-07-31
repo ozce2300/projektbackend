@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const port = process.env.DB_PORT | 8000;
+const aport = 8000;
 const app = express();
 const jwt = require("jsonwebtoken")
 
@@ -27,19 +27,22 @@ connection.connect(err => {
 // Middleware
 app.use(express.json());  // För att hantera JSON-data
 app.use(cors());  // För att hantera CORS
+app.use(express.urlencoded({ extended: true })) // Aktivera formulärdata.
 
 // Exportera connection
 module.exports = connection;
 
 // Importera rutter från 'routes' mappen
-const getMenu = require('./routes/getMenu');
+const start = require("./routes/start")
 const auth = require('./routes/auth');
+const getMenu = require('./routes/getMenu');
 const cms = require('./routes/cms');
 const postTable = require('./routes/postTable')
 
 // Använd routes
+app.use("/", start)
 app.use("/admin", auth);
-app.use("/", authenticateToken, getMenu);
+app.use("/getMenu", authenticateToken, getMenu);
 app.use("/cms", authenticateToken, cms);
 app.use("/postTable", authenticateToken, postTable);
 
@@ -65,6 +68,6 @@ function authenticateToken(req, res, next) {
 }
 
 // Starta server
-app.listen(port, () => {
-    console.log(`Server running at port: ${port}`);
+app.listen(aport, () => {
+    console.log(`Server running at port: ${aport}`);
 });
