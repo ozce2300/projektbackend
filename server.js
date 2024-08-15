@@ -40,11 +40,11 @@ const cms = require('./routes/cms');
 const postTable = require('./routes/postTable')
 
 // Använd routes
-app.use("/", start)
-app.use("/admin", auth);
-app.use("/getMenu", authenticateToken, getMenu);
-app.use("/cms", authenticateToken, cms);
-app.use("/postTable", authenticateToken, postTable);
+app.use("/api", start)
+app.use("/api/admin", auth);
+app.use("/api/getMenu", authenticateToken, getMenu);
+app.use("/api/cms", authenticateToken, cms);
+app.use("/api/postTable", postTable);
 
 //Validera token
 function authenticateToken(req, res, next) {
@@ -66,6 +66,9 @@ function authenticateToken(req, res, next) {
         next();
     });
 }
+
+//exportera authenticateToken
+module.exports = { authenticateToken };
 
 // Starta server
 app.listen(aport, () => {

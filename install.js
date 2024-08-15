@@ -30,6 +30,7 @@ connection.query(`DROP TABLE IF EXISTS foodmeny`, (err, results) => {
 })
 connection.query(`CREATE TABLE foodmeny (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(235),
     name VARCHAR(235),
     description VARCHAR(300),
     price INT,

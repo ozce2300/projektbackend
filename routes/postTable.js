@@ -3,6 +3,8 @@ const router = express.Router();
 const connection = require("../server"); // Importera anslutningen
 const nodemailer = require("nodemailer");
 require('dotenv').config(); 
+const { authenticateToken } = require('../server');  // Importera authenticateToken
+
 
 // Transporter för nodemailer med e-postdomänens SMTP-inställningar
 const transporter = nodemailer.createTransport({
@@ -98,5 +100,20 @@ router.get('/', (req, res) => {
         res.json({ message: "Get booking", results })
 });
 });
+//SQL-Fråga radera
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
 
+    connection.query('DELETE FROM bord WHERE id = ?', [id],(err,results) => {
+        if(err) {
+            console.error("Database query error")
+            res.status(500).json({error: "Server error"})
+            return;
+        }
+
+        res.json({message: "Meny deleted", results})
+    })
+
+
+});
 module.exports = router;
