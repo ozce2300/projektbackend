@@ -3,7 +3,7 @@ const router = express.Router();
 const connection = require("../server"); // Importera anslutningen
 const nodemailer = require("nodemailer");
 require('dotenv').config(); 
-const { authenticateToken } = require('../server');  // Importera authenticateToken
+const authenticateToken = require('../authmiddle');  // Importera authenticateToken
 
 
 // Transporter för nodemailer med e-postdomänens SMTP-inställningar
@@ -86,7 +86,7 @@ router.post('/', (req, res) => {
 });
 
 //SQL-Fråga
-router.get('/', (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
     connection.query('SELECT * FROM bord', (err, results) => {
         if (err) {
             console.error('Database query error:', err)

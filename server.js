@@ -5,6 +5,8 @@ require("dotenv").config();
 const aport = 8000;
 const app = express();
 const jwt = require("jsonwebtoken")
+const authenticateToken = require('./authmiddle');  // Importera authenticateToken
+
 
 
 // Ansluta till MySQL-databas
@@ -46,29 +48,6 @@ app.use("/api/getMenu", authenticateToken, getMenu);
 app.use("/api/cms", authenticateToken, cms);
 app.use("/api/postTable", postTable);
 
-//Validera token
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    console.log('Authorization header:', authHeader);  // Lägg till denna rad
-    const token = authHeader && authHeader.split(" ")[1]; // Token
-
-    if (token == null) {
-        return res.status(401).json({message: "Not authorize for this page, token missing"});
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
-        if (err) {
-            console.error('JWT verification error:', err);  // Lägg till denna rad
-            return res.status(403).json({message: "Invalid JWT"});
-        }
-
-        req.username = username;
-        next();
-    });
-}
-
-//exportera authenticateToken
-module.exports = { authenticateToken };
 
 // Starta server
 app.listen(aport, () => {
